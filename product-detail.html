@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Daraz Bangladesh</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 20px;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff6b6b;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #ff6b6b;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .product-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 400px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 100px;
+        }
+
+        .product-info h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: #999;
+        }
+
+        .product-price {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+
+        .product-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .product-specs {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+
+        .spec-row:last-child {
+            border-bottom: none;
+        }
+
+        .spec-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .spec-value {
+            color: #666;
+        }
+
+        .stock-status {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .stock-in {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .stock-out {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quantity-selector label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .quantity-selector input {
+            width: 60px;
+            padding: 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-add-cart {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .btn-add-cart:hover {
+            background: #ff5252;
+        }
+
+        .btn-add-cart:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        .btn-wishlist {
+            background: white;
+            color: #ff6b6b;
+            border: 2px solid #ff6b6b;
+        }
+
+        .btn-wishlist:hover {
+            background: #ffe8e8;
+        }
+
+        .related-products {
+            margin-top: 40px;
+        }
+
+        .related-products h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-card-image {
+            width: 100%;
+            height: 150px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+        }
+
+        .product-card-info {
+            padding: 15px;
+        }
+
+        .product-card-name {
+            font-weight: 600;
+            font-size: 12px;
+            color: #333;
+            margin-bottom: 8px;
+            overflow: hidden;
+            line-height: 1.4;
+        }
+
+        .product-card-price {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .product-container {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo" onclick="window.location.href='dashboard.html'">DARAZ</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="dashboard.html">Home</a> / <span id="breadcrumbProduct">Product</span>
+        </div>
+
+        <div class="product-container" id="productContainer">
+            <div style="display: flex; align-items: center; justify-content: center;">
+                <p>Loading product details...</p>
+            </div>
+        </div>
+
+        <div class="related-products" id="relatedProducts" style="display: none;">
+            <h2>Related Products</h2>
+            <div class="products-grid" id="relatedProductsGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+        let product = null;
+
+        window.addEventListener('load', async () => {
+            if (!productId) {
+                window.location.href = 'dashboard.html';
+                return;
+            }
+            await loadProductDetails();
+        });
+
+        async function loadProductDetails() {
+            try {
+                const response = await fetch(`get-products.php?id=${productId}`);
+                const data = await response.json();
+                
+                if (data.success && data.products.length > 0) {
+                    product = data.products[0];
+                    displayProduct(product);
+                } else {
+                    document.getElementById('productContainer').innerHTML = '<p>Product not found</p>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('productContainer').innerHTML = '<p>Error loading product</p>';
+            }
+        }
+
+        function displayProduct(product) {
+            document.getElementById('breadcrumbProduct').textContent = product.name;
+            
+            const html = `
+                <div class="product-image">📦</div>
+                <div class="product-info">
+                    <h1>${escapeHtml(product.name)}</h1>
+                    <div class="product-rating">
+                        <span>⭐⭐⭐⭐⭐</span>
+                        <span>(256 reviews)</span>
+                    </div>
+                    <div class="product-price">৳ ${parseFloat(product.price).toFixed(2)}</div>
+                    <div class="product-description">${escapeHtml(product.description || 'Premium quality product')}</div>
+                    
+                    <div class="product-specs">
+                        <div class="spec-row">
+                            <span class="spec-label">Category</span>
+                            <span class="spec-value">${escapeHtml(product.category)}</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">Stock Available</span>
+                            <span class="spec-value">${product.stock} units</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">Seller</span>
+                            <span class="spec-value">Daraz Store</span>
+                        </div>
+                    </div>
+
+                    <div class="stock-status ${product.stock > 0 ? 'stock-in' : 'stock-out'}">
+                        ${product.stock > 0 ? `✓ In Stock (${product.stock} available)` : '✗ Out of Stock'}
+                    </div>
+
+                    <div class="quantity-selector">
+                        <label for="quantity">Quantity:</label>
+                        <input type="number" id="quantity" min="1" max="${product.stock}" value="1">
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-add-cart" ${product.stock <= 0 ? 'disabled' : ''} onclick="addToCart()">
+                            🛒 Add to Cart
+                        </button>
+                        <button class="btn btn-wishlist">❤️ Wishlist</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('productContainer').innerHTML = html;
+        }
+
+        async function addToCart() {
+            if (!product) return;
+
+            const quantity = parseInt(document.getElementById('quantity').value);
+            
+            try {
+                const formData = new FormData();
+                formData.append('action', 'add');
+                formData.append('product_id', product.id);
+                formData.append('quantity', quantity);
+
+                const response = await fetch('add-to-cart.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(`${quantity} item(s) added to cart!`);
+                    setTimeout(() => {
+                        window.location.href = 'cart.html';
+                    }, 500);
+                } else {
+                    alert(data.message || 'Error adding to cart');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error adding to cart');
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

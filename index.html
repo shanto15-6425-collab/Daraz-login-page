@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Daraz Bangladesh</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            color: #ff6b6b;
+            font-size: 36px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .logo p {
+            color: #666;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff6b6b;
+        }
+
+        .form-group input::placeholder {
+            color: #999;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .remember-me label {
+            margin-bottom: 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .forgot-password {
+            color: #ff6b6b;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #ff5252;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-loading {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .register-link a {
+            color: #ff6b6b;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            color: #ff5252;
+            background: #ffebee;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .success {
+            color: #4caf50;
+            background: #e8f5e9;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .login-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .login-option {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .login-option.active {
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+            background: #ffe8e8;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>DARAZ</h1>
+            <p>Bangladesh's Premier E-Commerce Platform</p>
+        </div>
+
+        <div id="message" class="error"></div>
+
+        <div class="login-options">
+            <div class="login-option active" data-type="email">Email</div>
+            <div class="login-option" data-type="phone">Phone</div>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="emailPhone">Email Address</label>
+                <input 
+                    type="email" 
+                    id="emailPhone" 
+                    name="emailPhone" 
+                    placeholder="Enter your email"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="Enter your password"
+                    required
+                >
+            </div>
+
+            <div class="remember-forgot">
+                <div class="remember-me">
+                    <input type="checkbox" id="rememberMe" name="rememberMe">
+                    <label for="rememberMe">Remember me</label>
+                </div>
+                <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="btn" id="loginBtn">Login</button>
+        </form>
+
+        <div class="register-link">
+            Don't have an account? <a href="register.html">Register here</a>
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const emailPhone = document.getElementById('emailPhone');
+        const loginOptions = document.querySelectorAll('.login-option');
+        const messageDiv = document.getElementById('message');
+        
+        let loginType = 'email';
+
+        // Switch between email and phone login
+        loginOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                loginOptions.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+                loginType = this.dataset.type;
+                
+                if (loginType === 'phone') {
+                    emailPhone.type = 'tel';
+                    emailPhone.placeholder = 'Enter your phone number';
+                    emailPhone.name = 'phone';
+                    document.querySelector('label[for="emailPhone"]').textContent = 'Phone Number';
+                } else {
+                    emailPhone.type = 'email';
+                    emailPhone.placeholder = 'Enter your email';
+                    emailPhone.name = 'email';
+                    document.querySelector('label[for="emailPhone"]').textContent = 'Email Address';
+                }
+                emailPhone.value = '';
+            });
+        });
+
+        // Handle login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const emailPhoneValue = emailPhone.value.trim();
+            const password = document.getElementById('password').value.trim();
+            const rememberMe = document.getElementById('rememberMe').checked;
+
+            if (!emailPhoneValue || !password) {
+                showMessage('Please fill in all fields', 'error');
+                return;
+            }
+
+            // Show loading state
+            const btn = document.getElementById('loginBtn');
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.classList.add('btn-loading');
+            btn.innerHTML = '<span class="loading"></span>';
+
+            try {
+                const formData = new FormData();
+                formData.append('action', 'login');
+                formData.append(loginType, emailPhoneValue);
+                formData.append('password', password);
+                formData.append('rememberMe', rememberMe ? 1 : 0);
+
+                const response = await fetch('login.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage('Login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                } else {
+                    showMessage(data.message || 'Login failed', 'error');
+                    btn.disabled = false;
+                    btn.classList.remove('btn-loading');
+                    btn.textContent = originalText;
+                }
+            } catch (error) {
+                showMessage('An error occurred. Please try again.', 'error');
+                btn.disabled = false;
+                btn.classList.remove('btn-loading');
+                btn.textContent = originalText;
+                console.error('Error:', error);
+            }
+        });
+
+        function showMessage(message, type) {
+            messageDiv.textContent = message;
+            messageDiv.className = type;
+            messageDiv.style.display = 'block';
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Show saved email/phone if exists
+        window.addEventListener('load', function() {
+            const savedEmail = localStorage.getItem('saved_email');
+            const savedPhone = localStorage.getItem('saved_phone');
+            
+            if (savedEmail) {
+                emailPhone.value = savedEmail;
+                document.querySelector('[data-type="email"]').click();
+            } else if (savedPhone) {
+                emailPhone.value = savedPhone;
+                document.querySelector('[data-type="phone"]').click();
+            }
+        });
+    </script>
+</body>
+</html>

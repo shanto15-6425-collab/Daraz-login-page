@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Daraz Bangladesh</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 20px;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff6b6b;
+            text-transform: uppercase;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn-home {
+            padding: 10px 20px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-home:hover {
+            background: #ff5252;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+        }
+
+        .cart-items {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 80px 1fr 100px 100px 50px;
+            gap: 20px;
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            align-items: center;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 80px;
+            height: 80px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .item-details h3 {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .item-price {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .item-quantity button {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .item-quantity input {
+            width: 40px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            padding: 5px;
+            border-radius: 3px;
+        }
+
+        .item-total {
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+            min-width: 100px;
+        }
+
+        .item-remove {
+            cursor: pointer;
+            color: #ff5252;
+            font-weight: bold;
+            text-align: center;
+            font-size: 20px;
+            min-width: 50px;
+        }
+
+        .item-remove:hover {
+            text-decoration: underline;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .summary {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            height: fit-content;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 20px;
+        }
+
+        .summary-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .summary-row.total {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            padding-top: 10px;
+            border-top: 2px solid #e0e0e0;
+            margin-top: 10px;
+        }
+
+        .btn-checkout {
+            width: 100%;
+            padding: 12px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+
+        .btn-checkout:hover {
+            background: #ff5252;
+        }
+
+        .btn-checkout:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .summary {
+                position: static;
+            }
+
+            .cart-item {
+                grid-template-columns: 60px 1fr 40px;
+                gap: 10px;
+            }
+
+            .item-quantity,
+            .item-total {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">DARAZ</div>
+            <div class="nav-right">
+                <button class="btn-home" onclick="window.location.href='dashboard.html'">Continue Shopping</button>
+                <button class="btn-home" onclick="logout()" style="background: #999;">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="cart-items">
+            <div class="cart-header">Shopping Cart</div>
+            <div id="cartItemsContainer"></div>
+        </div>
+
+        <div class="summary">
+            <div class="summary-title">Order Summary</div>
+            <div class="summary-row">
+                <span>Subtotal:</span>
+                <span id="subtotal">৳ 0.00</span>
+            </div>
+            <div class="summary-row">
+                <span>Shipping:</span>
+                <span id="shipping">৳ 0.00</span>
+            </div>
+            <div class="summary-row">
+                <span>Tax:</span>
+                <span id="tax">৳ 0.00</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total:</span>
+                <span id="total">৳ 0.00</span>
+            </div>
+            <button class="btn-checkout" id="checkoutBtn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <script>
+        let cartItems = [];
+
+        window.addEventListener('load', async () => {
+            await checkAuth();
+            await loadCart();
+        });
+
+        async function checkAuth() {
+            try {
+                const response = await fetch('login.php');
+                const data = await response.json();
+                
+                if (!data.logged_in) {
+                    window.location.href = 'index.html';
+                }
+            } catch (error) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        async function loadCart() {
+            try {
+                const response = await fetch('add-to-cart.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    cartItems = data.items;
+                    displayCart();
+                    calculateTotal();
+                } else {
+                    document.getElementById('cartItemsContainer').innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function displayCart() {
+            const container = document.getElementById('cartItemsContainer');
+            
+            if (cartItems.length === 0) {
+                container.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+                document.getElementById('checkoutBtn').disabled = true;
+                return;
+            }
+
+            container.innerHTML = cartItems.map(item => {
+                const itemTotal = item.price * item.quantity;
+                return `
+                    <div class="cart-item">
+                        <div class="item-image">📦</div>
+                        <div class="item-details">
+                            <h3>${escapeHtml(item.name)}</h3>
+                            <div class="item-price">৳ ${parseFloat(item.price).toFixed(2)}</div>
+                        </div>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(${item.product_id}, ${item.quantity - 1})">-</button>
+                            <input type="number" value="${item.quantity}" readonly min="1">
+                            <button onclick="updateQuantity(${item.product_id}, ${item.quantity + 1})">+</button>
+                        </div>
+                        <div class="item-total">৳ ${itemTotal.toFixed(2)}</div>
+                        <div class="item-remove" onclick="removeFromCart(${item.product_id})">✕</div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('checkoutBtn').disabled = false;
+        }
+
+        async function updateQuantity(productId, newQuantity) {
+            if (newQuantity <= 0) {
+                removeFromCart(productId);
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('action', 'update');
+                formData.append('product_id', productId);
+                formData.append('quantity', newQuantity);
+
+                await fetch('add-to-cart.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                await loadCart();
+                calculateTotal();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function removeFromCart(productId) {
+            if (!confirm('Remove this item from cart?')) return;
+
+            try {
+                const formData = new FormData();
+                formData.append('action', 'remove');
+                formData.append('product_id', productId);
+
+                await fetch('add-to-cart.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                await loadCart();
+                calculateTotal();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function calculateTotal() {
+            const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const shipping = subtotal > 0 ? 100 : 0; // Free shipping if empty
+            const tax = subtotal * 0.05; // 5% tax
+            const total = subtotal + shipping + tax;
+
+            document.getElementById('subtotal').textContent = '৳ ' + subtotal.toFixed(2);
+            document.getElementById('shipping').textContent = '৳ ' + shipping.toFixed(2);
+            document.getElementById('tax').textContent = '৳ ' + tax.toFixed(2);
+            document.getElementById('total').textContent = '৳ ' + total.toFixed(2);
+
+            // Store totals in localStorage for checkout
+            localStorage.setItem('orderTotal', total.toFixed(2));
+            localStorage.setItem('orderSubtotal', subtotal.toFixed(2));
+            localStorage.setItem('orderShipping', shipping.toFixed(2));
+            localStorage.setItem('orderTax', tax.toFixed(2));
+        }
+
+        function proceedToCheckout() {
+            if (cartItems.length === 0) {
+                alert('Your cart is empty');
+                return;
+            }
+            window.location.href = 'checkout.html';
+        }
+
+        async function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                try {
+                    await fetch('logout.php', { method: 'POST' });
+                    window.location.href = 'index.html';
+                } catch (error) {
+                    window.location.href = 'index.html';
+                }
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
